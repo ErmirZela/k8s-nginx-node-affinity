@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-t
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-t
+  template:
+    metadata:
+      labels:
+        app: nginx-t
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - node-b
+                      - node-c
